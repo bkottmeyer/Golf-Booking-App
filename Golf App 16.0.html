@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf Course Booking Dashboard</title>
+    <style>
+        :root {
+            --color-primary: #218085;
+            --color-primary-hover: #1a7476;
+            --color-bg: #fcfcf9;
+            --color-surface: #fffffe;
+            --color-text: #134252;
+            --color-text-secondary: #627c71;
+            --color-border: rgba(94, 82, 64, 0.2);
+            --color-success: #208085;
+            --color-error: #c0152f;
+            --radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--color-text-secondary);
+            font-size: 15px;
+            margin: 0;
+        }
+
+.courses-grid {
+  display: grid;
+  /* Cards will auto-wrap based on available width */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+
+        .course-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 150ms ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .course-header {
+            margin-bottom: 16px;
+        }
+
+        .course-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 8px 0;
+        }
+
+        .course-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            flex: 0;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(33, 128, 133, 0.05);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .management-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            color: var(--color-text-secondary);
+        }
+
+        input[type="text"],
+        input[type="url"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-size: 14px;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(33, 128, 133, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 150ms ease;
+            margin-top: 8px;
+        }
+
+        .btn-add:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .status-message.success {
+            background: rgba(32, 128, 133, 0.15);
+            color: var(--color-success);
+            border: 1px solid rgba(32, 128, 133, 0.2);
+        }
+
+        .status-message.error {
+            background: rgba(192, 21, 47, 0.15);
+            color: var(--color-error);
+            border: 1px solid rgba(192, 21, 47, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--color-text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                margin-bottom: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .layout {
+            display: flex;
+            gap: 16px;
+            padding: 12px;
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    >
+</head>
+<body>
+  <!-- Top bar with map toggle -->
+  <div class="top-bar" style="padding:8px 12px; border-bottom:1px solid rgba(94,82,64,0.15); background:#fcfcf9;">
+    <button id="mapToggleButton" class="btn btn-secondary" style="padding:4px 10px; font-size:13px; border-radius:6px; border:1px solid rgba(94,82,64,0.3); background:#fff; cursor:pointer;">
+      Show Map
+    </button>
+  </div>
+
+  <!-- Main layout: left app, right map -->
+  <div class="layout">
+    <!-- Left panel: app -->
+    <div id="appPanel" style="flex:1 1 auto;">
+      <div class="container">
+        <header>
+          <h1>⛳ Golf Course Booking</h1>
+          <p class="subtitle">Quick access to your favorite course booking pages</p>
+        </header>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px;">
+          <div style="flex:1; min-width:220px;">
+            <input
+              type="text"
+              id="courseSearch"
+              placeholder="Search courses by name..."
+              style="width:100%; padding:8px 10px; font-size:13px; border-radius:6px; border:1px solid rgba(94,82,64,0.2);"
+            >
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <input type="checkbox" id="favoritesFirst" style="width:16px; height:16px; accent-color:#218085;">
+              <label for="favoritesFirst" style="font-size:13px; color:#627c71; user-select:none;">
+                Show favorites first
+              </label>
+            </div>
+            <button
+              id="clearFavoritesBtn"
+              style="padding:4px 10px; font-size:12px; border-radius:6px; border:1px solid rgba(94,82,64,0.3); background:#fcfcf9; color:#627c71; cursor:pointer;"
+              title="Clear all favorites"
+            >
+              Clear favorites
+            </button>
+          </div>
+        </div>
+
+        <div class="courses-grid" id="coursesGrid"></div>
+
+        <div class="management-section">
+          <h2 class="section-title">Add a Course</h2>
+          <div id="statusMessage"></div>
+
+          <div class="form-group">
+            <label class="form-label">Course Name</label>
+            <input type="text" id="courseName" placeholder="e.g., Fox Hollow" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Booking URL</label>
+              <input type="url" id="courseUrl" placeholder="https://..." required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Latitude (optional)</label>
+              <input type="text" id="courseLat" placeholder="e.g., 39.6501">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Longitude (optional)</label>
+              <input type="text" id="courseLng" placeholder="e.g., -105.0820">
+            </div>
+          </div>
+
+          <button class="btn-add" id="addBtn">+ Add Course</button>
+        </div>
+
+        <div class="management-section" style="margin-top:20px; margin-bottom:16px;">
+          <h2 class="section-title">Export / Import Courses</h2>
+          <p style="font-size:13px; color:#627c71; margin-top:0; margin-bottom:8px;">
+            Export your courses from one device and import them on another. Only the course list is transferred, not daily tee time notes.
+          </p>
+
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+            <button
+              class="btn-add"
+              id="exportBtn"
+              style="width:auto; padding-inline:16px; flex:0;"
+            >
+              Export Courses
+            </button>
+            <button
+              class="btn-add"
+              id="importBtn"
+              style="width:auto; padding-inline:16px; background:#627c71; flex:0;"
+            >
+              Import Courses
+            </button>
+          </div>
+
+          <textarea
+            id="courseTransfer"
+            placeholder="Exported course data will appear here. To import on another device, paste the exported text here and click 'Import Courses'."
+            style="width:100%; min-height:90px; font-size:12px; padding:8px; border-radius:6px; border:1px solid rgba(94,82,64,0.2); resize:vertical;"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right panel: map (starts hidden) -->
+    <div id="mapPanel" style="flex:0 0 40%; max-width:500px; display:none;">
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS just before app script -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+  <script>
+    function getTodayKey() {
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    const TODAY_KEY = getTodayKey();
+
+    const defaultCourses = [
+      { name: 'Fox Hollow', url: 'https://app.membersports.com/tee-times/3703/20589/0/7/0', favorite: false },
+      { name: 'Homestead',  url: 'https://app.membersports.com/tee-times/3807/4902/0/7/0', favorite: false },
+      { name: 'Fossil Trace', url: 'https://fossiltrace.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23.999722222222225', favorite: false },
+      { name: 'Foothills', url: 'https://app.membersports.com/tee-times/3697/4758/0/3/0', favorite: false },
+      { name: 'Racoon Creek', url: 'https://raccooncreek.ezlinksgolf.com/index.html#/search', favorite: false }
+    ];
+
+    let map = null;
+    let markersLayer = null;
+    let mapVisible = false;
+
+    function normalizeCourse(c) {
+      const lat = (c.lat !== undefined && c.lat !== null && c.lat !== '') ? Number(c.lat) : null;
+      const lng = (c.lng !== undefined && c.lng !== null && c.lng !== '') ? Number(c.lng) : null;
+      return {
+        name: c.name,
+        url: c.url,
+        favorite: !!c.favorite,
+        lat: (!Number.isNaN(lat) ? lat : null),
+        lng: (!Number.isNaN(lng) ? lng : null)
+      };
+    }
+
+    function loadCoursesRaw() {
+      const stored = localStorage.getItem('golfCourses');
+      return stored ? JSON.parse(stored) : defaultCourses;
+    }
+
+    function loadCourses() {
+      return loadCoursesRaw().map(normalizeCourse);
+    }
+
+    function saveCourses(courses) {
+      localStorage.setItem('golfCourses', JSON.stringify(courses));
+    }
+
+    function teeTimeKeyForCourse(courseUrl) {
+      return `teeTimes::${courseUrl}::${TODAY_KEY}`;
+    }
+
+    function loadTeeTimes(courseUrl) {
+      const key = teeTimeKeyForCourse(courseUrl);
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveTeeTimes(courseUrl, teeTimes) {
+      const key = teeTimeKeyForCourse(courseUrl);
+      if (!teeTimes || teeTimes.length === 0) {
+        localStorage.removeItem(key);
+      } else {
+        localStorage.setItem(key, JSON.stringify(teeTimes));
+      }
+    }
+
+    function getSearchText() {
+      const input = document.getElementById('courseSearch');
+      return input ? input.value.trim().toLowerCase() : '';
+    }
+
+    function isFavoritesFirstEnabled() {
+      const checkbox = document.getElementById('favoritesFirst');
+      return checkbox ? checkbox.checked : false;
+    }
+
+    function buildDisplayCourses() {
+      const courses = loadCourses();
+      const search = getSearchText();
+      const favFirst = isFavoritesFirstEnabled();
+
+      let filtered = courses;
+
+      if (search) {
+        filtered = courses.filter(c => {
+          const name = (c.name || '').toLowerCase();
+          return name.includes(search);
+        });
+      }
+
+      if (favFirst) {
+        const favs = filtered.filter(c => c.favorite);
+        const nonFavs = filtered.filter(c => !c.favorite);
+        return favs.concat(nonFavs);
+      }
+
+      return filtered;
+    }
+
+    function renderCourses() {
+      const allCourses = loadCourses();
+      const displayCourses = buildDisplayCourses();
+      const grid = document.getElementById('coursesGrid');
+
+      if (displayCourses.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1;">
+            <div class="empty-state">
+              <div class="empty-state-icon">🔍</div>
+              <div>No courses match your current search/filter.</div>
+            </div>
+          </div>
+        `;
+        if (mapVisible && map) {
+          updateMapMarkers([]);
+        }
+        return;
+      }
+
+      grid.innerHTML = displayCourses.map((course) => {
+        const allCoursesList = loadCourses();
+        const originalIndex = allCoursesList.findIndex(c => c.url === course.url);
+        const teeTimes = loadTeeTimes(course.url);
+
+        const teeTimesListHtml = teeTimes.length === 0
+          ? '<div style="font-size:12px; color:#627c71;">No tee times added yet for today.</div>'
+          : `<ul style="list-style:none; padding-left:0; margin:8px 0 0 0; font-size:13px;">${
+              teeTimes.map((t, i) => `
+                <li style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:4px;">
+                  <span>${t.time} – ${t.price} – ${t.players} players</span>
+                  <button
+                    style="border:none; background:transparent; color:#c0152f; cursor:pointer; font-size:13px;"
+                    onclick="deleteTeeTime('${encodeURIComponent(course.url)}', ${i}); return false;"
+                    title="Remove this tee time"
+                  >✕</button>
+                </li>
+              `).join('')
+            }</ul>`;
+
+        const star = course.favorite ? '⭐' : '☆';
+        const starTitle = course.favorite ? 'Unfavorite' : 'Mark as favorite';
+
+        return `
+          <div class="course-card" draggable="true" data-index="${originalIndex}">
+            <div class="course-header">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <div>
+                  <h3 class="course-name">${course.name}</h3>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <button
+                    style="border:none; background:transparent; cursor:pointer; font-size:18px;"
+                    onclick="toggleFavorite(${originalIndex}); return false;"
+                    title="${starTitle}"
+                  >${star}</button>
+                  <div class="drag-handle" style="cursor:grab; font-size:18px; color:#627c71;" title="Drag to reorder">
+                    ⋮⋮
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:#627c71; margin-bottom:4px;">
+                Available tee times (today)
+              </div>
+              <div
+                style="
+                  display:grid;
+                  grid-template-columns: repeat(4, minmax(0, 1fr));
+                  gap:4px;
+                  align-items:center;
+                "
+              >
+                <input
+                  type="time"
+                  id="tt-time-${originalIndex}"
+                  style="padding:4px 6px; font-size:12px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
+                >
+                <input
+                  type="text"
+                  id="tt-price-${originalIndex}"
+                  placeholder="$"
+                  style="padding:4px 6px; font-size:13px; min-width:70px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
+                >
+                <input
+                  type="number"
+                  id="tt-players-${originalIndex}"
+                  min="1"
+                  max="4"
+                  placeholder="#"
+                  style="padding:4px 6px; font-size:12px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
+                >
+                <button
+                  style="padding:4px 8px; font-size:12px; border:none; border-radius:4px; background:#218085; color:#fff; cursor:pointer;"
+                  onclick="addTeeTime(${originalIndex}); return false;"
+                >Add</button>
+              </div>
+              ${teeTimesListHtml}
+            </div>
+
+
+            <div class="course-actions">
+              <button class="btn btn-primary" onclick="openBooking('${encodeURIComponent(course.url)}')">
+                🔗 Open Booking
+              </button>
+              <button class="btn btn-secondary" onclick="deleteCourse(${originalIndex})" title="Delete course">
+                ✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      attachDragAndDropHandlers();
+
+      if (mapVisible && map) {
+        const all = loadCourses();
+        updateMapMarkers(all);
+      }
+    }
+
+    function attachDragAndDropHandlers() {
+      const grid = document.getElementById('coursesGrid');
+      const cards = Array.from(grid.querySelectorAll('.course-card'));
+      let dragStartIndex = null;
+
+      cards.forEach(card => {
+        card.addEventListener('dragstart', () => {
+          dragStartIndex = Number(card.getAttribute('data-index'));
+          card.classList.add('dragging');
+        });
+
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
+        });
+
+        card.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          card.classList.add('drag-over');
+        });
+
+        card.addEventListener('dragleave', () => {
+          card.classList.remove('drag-over');
+        });
+
+        card.addEventListener('drop', () => {
+          card.classList.remove('drag-over');
+          const dragEndIndex = Number(card.getAttribute('data-index'));
+          if (dragStartIndex === null || dragEndIndex === dragStartIndex) return;
+          reorderCourses(dragStartIndex, dragEndIndex);
+        });
+      });
+    }
+
+    function reorderCourses(fromIndex, toIndex) {
+      const courses = loadCourses();
+      if (fromIndex < 0 || fromIndex >= courses.length) return;
+      if (toIndex < 0 || toIndex >= courses.length) return;
+
+      const item = courses.splice(fromIndex, 1)[0];
+      courses.splice(toIndex, 0, item);
+
+      saveCourses(courses);
+      renderCourses();
+    }
+
+    function toggleFavorite(index) {
+      const courses = loadCourses();
+      if (!courses[index]) return;
+      courses[index].favorite = !courses[index].favorite;
+      saveCourses(courses);
+      renderCourses();
+    }
+
+    function clearAllFavorites() {
+      const courses = loadCourses();
+      let changed = false;
+      courses.forEach(c => {
+        if (c.favorite) {
+          c.favorite = false;
+          changed = true;
+        }
+      });
+      if (changed) {
+        saveCourses(courses);
+      }
+      const favCheckbox = document.getElementById('favoritesFirst');
+      if (favCheckbox) {
+        favCheckbox.checked = false;
+      }
+      renderCourses();
+      showStatus('All favorites cleared.', 'success');
+    }
+
+    function addTeeTime(courseIndex) {
+      const courses = loadCourses();
+      const course = courses[courseIndex];
+      if (!course) return;
+
+      const timeInput = document.getElementById(`tt-time-${courseIndex}`);
+      const priceInput = document.getElementById(`tt-price-${courseIndex}`);
+      const playersInput = document.getElementById(`tt-players-${courseIndex}`);
+
+      const time = (timeInput.value || '').trim();
+      const price = (priceInput.value || '').trim();
+      const players = (playersInput.value || '').trim();
+
+      if (!time || !price || !players) {
+        showStatus('Please fill time, price, and players for the tee time.', 'error');
+        return;
+      }
+
+      const parsedPlayers = Number(players);
+      if (Number.isNaN(parsedPlayers) || parsedPlayers <= 0) {
+        showStatus('Players must be a positive number.', 'error');
+        return;
+      }
+
+      const teeTimes = loadTeeTimes(course.url);
+      teeTimes.push({ time, price, players: parsedPlayers });
+
+      saveTeeTimes(course.url, teeTimes);
+
+      timeInput.value = '';
+      priceInput.value = '';
+      playersInput.value = '';
+
+      renderCourses();
+    }
+
+    function deleteTeeTime(encodedCourseUrl, teeTimeIndex) {
+      const url = decodeURIComponent(encodedCourseUrl);
+      const teeTimes = loadTeeTimes(url);
+      if (teeTimeIndex < 0 || teeTimeIndex >= teeTimes.length) return;
+
+      teeTimes.splice(teeTimeIndex, 1);
+      saveTeeTimes(url, teeTimes);
+      renderCourses();
+    }
+
+    function openBooking(encodedUrl) {
+      const url = decodeURIComponent(encodedUrl);
+      window.open(url, '_blank');
+    }
+
+    function deleteCourse(index) {
+      if (confirm('Are you sure you want to delete this course?')) {
+        let courses = loadCourses();
+        const removed = courses.splice(index, 1)[0];
+        saveCourses(courses);
+
+        if (removed && removed.url) {
+          const key = teeTimeKeyForCourse(removed.url);
+          localStorage.removeItem(key);
+        }
+
+        renderCourses();
+        showStatus('Course deleted', 'success');
+      }
+    }
+
+   function addCourse() {
+  const name = document.getElementById('courseName').value.trim();
+  const url = document.getElementById('courseUrl').value.trim();
+  const latRaw = document.getElementById('courseLat') ? document.getElementById('courseLat').value.trim() : '';
+  const lngRaw = document.getElementById('courseLng') ? document.getElementById('courseLng').value.trim() : '';
+
+  if (!name || !url) {
+    showStatus('Please fill in both course name and URL.', 'error');
+    return;
+  }
+
+  const courses = loadCourses();
+
+  // Allow same URL on different tiles; only block exact same name+URL
+  if (courses.some(c => c.name === name && c.url === url)) {
+    showStatus('This course already exists.', 'error');
+    return;
+  }
+
+  let lat = null;
+  let lng = null;
+
+  if (latRaw && lngRaw) {
+    const latNum = Number(latRaw);
+    const lngNum = Number(lngRaw);
+    if (Number.isNaN(latNum) || Number.isNaN(lngNum)) {
+      showStatus('Latitude and longitude must be valid numbers (or left blank).', 'error');
+      return;
+    }
+    lat = latNum;
+    lng = lngNum;
+  } else if (latRaw || lngRaw) {
+    showStatus('Please provide both latitude and longitude, or leave both blank.', 'error');
+    return;
+  }
+
+  courses.push({ name, url, favorite: false, lat, lng });
+  saveCourses(courses);
+
+  document.getElementById('courseName').value = '';
+  document.getElementById('courseUrl').value = '';
+  if (document.getElementById('courseLat')) document.getElementById('courseLat').value = '';
+  if (document.getElementById('courseLng')) document.getElementById('courseLng').value = '';
+
+  renderCourses();
+  showStatus(`${name} added successfully!`, 'success');
+}
+
+
+    function showStatus(message, type) {
+      const statusDiv = document.getElementById('statusMessage');
+      statusDiv.innerHTML = `<div class="status-message ${type}">${message}</div>`;
+      setTimeout(() => {
+        statusDiv.innerHTML = '';
+      }, 3000);
+    }
+
+    // Leaflet: center on Denver
+    function initMap() {
+      map = L.map('map').setView([39.7392, -104.9903], 9);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      markersLayer = L.layerGroup().addTo(map);
+    }
+
+    function updateMapMarkers(courses) {
+      if (!map || !markersLayer) return;
+
+      markersLayer.clearLayers();
+      const bounds = [];
+
+      courses.forEach(course => {
+        if (course.lat != null && course.lng != null) {
+          const lat = Number(course.lat);
+          const lng = Number(course.lng);
+          if (Number.isNaN(lat) || Number.isNaN(lng)) return;
+
+          const marker = L.marker([lat, lng]).addTo(markersLayer);
+
+          const popupHtml = `
+            <div>
+              <strong>${course.name}</strong><br>
+              <button type="button" class="map-favorite-btn" data-url="${course.url}">
+                ${course.favorite ? 'Unfavorite' : 'Favorite'}
+              </button>
+            </div>
+          `;
+
+          marker.bindPopup(popupHtml);
+          bounds.push([lat, lng]);
+        }
+      });
+
+      if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [40, 40] });
+      }
+    }
+
+    document.addEventListener('click', (event) => {
+      const btn = event.target.closest('.map-favorite-btn');
+      if (!btn) return;
+
+      const url = btn.getAttribute('data-url');
+      if (!url) return;
+
+      const courses = loadCourses();
+      const index = courses.findIndex(c => c.url === url);
+      if (index === -1) return;
+
+      courses[index].favorite = !courses[index].favorite;
+      saveCourses(courses);
+      renderCourses();
+    });
+
+    function toggleMap() {
+      const mapPanel = document.getElementById('mapPanel');
+      const toggleButton = document.getElementById('mapToggleButton');
+      if (!mapPanel || !toggleButton) return;
+
+      mapVisible = !mapVisible;
+
+      if (mapVisible) {
+        mapPanel.style.display = 'block';
+        toggleButton.textContent = 'Hide Map';
+
+        if (!map) {
+          initMap();
+          const courses = loadCourses();
+          updateMapMarkers(courses);
+        } else {
+          setTimeout(() => {
+            map.invalidateSize();
+            const courses = loadCourses();
+            updateMapMarkers(courses);
+          }, 0);
+        }
+      } else {
+        mapPanel.style.display = 'none';
+        toggleButton.textContent = 'Show Map';
+      }
+    }
+
+    document.getElementById('addBtn').addEventListener('click', addCourse);
+    document.getElementById('courseUrl').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addCourse();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', exportCourses);
+    document.getElementById('importBtn').addEventListener('click', importCourses);
+
+    const searchInput = document.getElementById('courseSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        renderCourses();
+      });
+    }
+
+    const favFirstCheckbox = document.getElementById('favoritesFirst');
+    if (favFirstCheckbox) {
+      favFirstCheckbox.addEventListener('change', () => {
+        renderCourses();
+      });
+    }
+
+    const clearFavBtn = document.getElementById('clearFavoritesBtn');
+    if (clearFavBtn) {
+      clearFavBtn.addEventListener('click', () => {
+        clearAllFavorites();
+      });
+    }
+
+    const mapToggleButton = document.getElementById('mapToggleButton');
+    if (mapToggleButton) {
+      mapToggleButton.addEventListener('click', toggleMap);
+    }
+
+    function exportCourses() {
+      const courses = loadCourses();
+      try {
+        const payload = {
+          version: 2,
+          exportedAt: new Date().toISOString(),
+          courses
+        };
+        const text = JSON.stringify(payload, null, 2);
+        const textarea = document.getElementById('courseTransfer');
+        textarea.value = text;
+        textarea.select();
+        showStatus('Courses exported. Copy the text and paste it into another device to import.', 'success');
+      } catch (e) {
+        showStatus('Failed to export courses.', 'error');
+      }
+    }
+
+    function importCourses() {
+      const textarea = document.getElementById('courseTransfer');
+      const text = textarea.value.trim();
+      if (!text) {
+        showStatus('Please paste exported course data into the box before importing.', 'error');
+        return;
+      }
+
+      try {
+        const payload = JSON.parse(text);
+        if (!payload || !Array.isArray(payload.courses)) {
+          showStatus('Invalid import format. Make sure you pasted the full exported text.', 'error');
+          return;
+        }
+
+        const importedCourses = payload.courses.map(normalizeCourse);
+        const valid = importedCourses.every(c => c && c.name && c.url);
+        if (!valid) {
+          showStatus('Imported data is missing required fields (name/url).', 'error');
+          return;
+        }
+
+        saveCourses(importedCourses);
+        renderCourses();
+        showStatus(`Imported ${importedCourses.length} courses successfully.`, 'success');
+      } catch (e) {
+        showStatus('Error parsing imported data. Make sure you pasted valid JSON.', 'error');
+      }
+    }
+
+    // Initial render only (map starts hidden; initMap() runs when you first click Show Map)
+    renderCourses();
+  </script>
+</body>
+</html>
