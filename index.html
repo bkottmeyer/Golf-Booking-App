@@ -418,7 +418,7 @@
 
   const TODAY_KEY = getTodayKey();
 
-  // Full hard-coded courses list (from your latest export)
+  // Full hard-coded courses list (from latest export)
   let hardCodedCourses = [
     {
       name: "Homestead",
@@ -685,6 +685,13 @@
       favorite: false,
       lat: 39.8328,
       lng: -105.082844
+    },
+    {
+      name: "Fox Hollow",
+      url: "https://app.membersports.com/tee-times/3703/20589/0/7/0",
+      favorite: false,
+      lat: 39.659479,
+      lng: -105.130172
     }
   ];
 
@@ -704,7 +711,6 @@
     };
   }
 
-  // Use hard-coded list, optionally overridden by localStorage if present
   function loadCoursesRaw() {
     const stored = localStorage.getItem('golfCourses');
     return stored ? JSON.parse(stored) : hardCodedCourses;
@@ -715,9 +721,7 @@
   }
 
   function saveCourses(courses) {
-    // Persist in localStorage
     localStorage.setItem('golfCourses', JSON.stringify(courses));
-    // Also update the in-memory hard-coded list so the current session stays in sync
     hardCodedCourses = courses.slice();
   }
 
@@ -774,7 +778,6 @@
   }
 
   function renderCourses() {
-    const allCourses = loadCourses();
     const displayCourses = buildDisplayCourses();
     const grid = document.getElementById('coursesGrid');
 
@@ -1047,7 +1050,6 @@
 
     const courses = loadCourses();
 
-    // Allow same URL on different tiles; only block exact same name+URL
     if (courses.some(c => c.name === name && c.url === url)) {
       showStatus('This course already exists.', 'error');
       return;
@@ -1090,7 +1092,6 @@
     }, 3000);
   }
 
-  // Leaflet: center on Denver
   function initMap() {
     map = L.map('map').setView([39.7392, -104.9903], 9);
 
@@ -1261,7 +1262,6 @@
     }
   }
 
-  // Initial render only
   renderCourses();
 </script>
 </body>
