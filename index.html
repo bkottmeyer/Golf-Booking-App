@@ -407,598 +407,862 @@
   <!-- Leaflet JS just before app script -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-  <script>
-    function getTodayKey() {
-      const d = new Date();
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+<script>
+  function getTodayKey() {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  const TODAY_KEY = getTodayKey();
+
+  // Full hard-coded courses list (from your latest export)
+  let hardCodedCourses = [
+    {
+      name: "Homestead",
+      url: "https://app.membersports.com/tee-times/3807/4902/0/7/0",
+      favorite: false,
+      lat: 39.652662,
+      lng: -105.125082
+    },
+    {
+      name: "Racoon Creek",
+      url: "https://raccooncreek.ezlinksgolf.com/index.html#/search",
+      favorite: false,
+      lat: 39.612894,
+      lng: -105.076728
+    },
+    {
+      name: "Common Ground",
+      url: "https://commonground-golf-course.book.teeitup.com/?course=5275&date=2026-01-06&max=999999",
+      favorite: false,
+      lat: 39.71732,
+      lng: -104.868628
+    },
+    {
+      name: "Foothills",
+      url: "https://app.membersports.com/tee-times/3697/4758/0/3/0",
+      favorite: false,
+      lat: 39.645641,
+      lng: -105.091523
+    },
+    {
+      name: "Fossil Trace",
+      url: "https://fossiltrace.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23.999722222222225",
+      favorite: false,
+      lat: 39.737193,
+      lng: -105.21183
+    },
+    {
+      name: "West Woods",
+      url: "https://www.westwoodsgolf.com/teetimes",
+      favorite: false,
+      lat: 39.816122,
+      lng: -105.185354
+    },
+    {
+      name: "Hyland Hills",
+      url: "https://hyland-hills-park-recreation-district.book.teeitup.com/?course=9201&date=2026-01-06&max=999999",
+      favorite: false,
+      lat: 39.870504,
+      lng: -105.051074
+    },
+    {
+      name: "Broken Tee",
+      url: "https://app.membersports.com/tee-times/3689/4748/0/0/0",
+      favorite: false,
+      lat: 39.642811,
+      lng: -105.01306
+    },
+    {
+      name: "University of Denver Golf Club",
+      url: "https://universityofdenver.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23.999722222222225",
+      favorite: false,
+      lat: 39.552784,
+      lng: -105.014457
+    },
+    {
+      name: "Meadows",
+      url: "https://app.membersports.com/tee-times/3697/4758/0/3/0",
+      favorite: false,
+      lat: 39.591636,
+      lng: -105.130805
+    },
+    {
+      name: "Aurora Hills",
+      url: "https://cityofaurora.ezlinksgolf.com/index.html#/search",
+      favorite: false,
+      lat: 39.716267,
+      lng: -104.842034
+    },
+    {
+      name: "Murphy Creek",
+      url: "https://cityofaurora.ezlinksgolf.com/index.html#/search",
+      favorite: false,
+      lat: 39.685862,
+      lng: -104.708028
+    },
+    {
+      name: "Saddle Rock",
+      url: "https://cityofaurora.ezlinksgolf.com/index.html#/search",
+      favorite: false,
+      lat: 39.595624,
+      lng: -104.735956
+    },
+    {
+      name: "City Park",
+      url: "https://app.membersports.com/tee-times/3629/20573/1/1/0",
+      favorite: false,
+      lat: 39.752335,
+      lng: -104.948798
+    },
+    {
+      name: "Kennedy",
+      url: "https://app.membersports.com/tee-times/3629/20573/1/1/0",
+      favorite: false,
+      lat: 39.653474,
+      lng: -104.866641
+    },
+    {
+      name: "Overalnd",
+      url: "https://app.membersports.com/tee-times/3629/20573/1/1/0",
+      favorite: false,
+      lat: 39.683074,
+      lng: -104.997813
+    },
+    {
+      name: "Wellshire",
+      url: "https://app.membersports.com/tee-times/3629/20573/1/1/0",
+      favorite: false,
+      lat: 39.65917,
+      lng: -104.941131
+    },
+    {
+      name: "Willis Case",
+      url: "https://app.membersports.com/tee-times/3629/20573/1/1/0",
+      favorite: false,
+      lat: 39.786155,
+      lng: -105.046328
+    },
+    {
+      name: "The Ridge at Castle Pines",
+      url: "https://castlepinesadvrespp.ezlinksgolf.com/index.html#/search",
+      favorite: false,
+      lat: 39.469532,
+      lng: -104.909391
+    },
+    {
+      name: "Riverdale Dunes",
+      url: "https://www.riverdalegolf.com/teetimes/",
+      favorite: false,
+      lat: 39.936744,
+      lng: -104.87605
+    },
+    {
+      name: "Riverdale Knolls",
+      url: "https://www.riverdalegolf.com/teetimes/",
+      favorite: false,
+      lat: 39.936744,
+      lng: -104.87605
+    },
+    {
+      name: "Colorado National",
+      url: "https://www.coloradonationalgolfclub.com/tee-times",
+      favorite: false,
+      lat: 40.005222,
+      lng: -105.025761
+    },
+    {
+      name: "Broadlands",
+      url: "https://www.thebroadlandsgc.com/golf/tee-times",
+      favorite: false,
+      lat: 39.956695,
+      lng: -105.04058
+    },
+    {
+      name: "Legacy Ridge",
+      url: "https://cityofwestminster.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23",
+      favorite: false,
+      lat: 39.892091,
+      lng: -105.03569
+    },
+    {
+      name: "Walnut Creek",
+      url: "https://cityofwestminster.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23",
+      favorite: false,
+      lat: 39.899864,
+      lng: -105.116699
+    },
+    {
+      name: "Thron Creek",
+      url: "https://thorncreek.quick18.com/teetimes/searchmatrix",
+      favorite: false,
+      lat: 39.942199,
+      lng: -104.979435
+    },
+    {
+      name: "Buffalo Run",
+      url: "https://www.buffalorungolfcourse.com/teetimes/",
+      favorite: false,
+      lat: 39.899321,
+      lng: -104.80416
+    },
+    {
+      name: "Omni Interlocken",
+      url: "https://omni-interlocken-resort-golf-club.book.teeitup.com/?course=594&date=2026-01-08&max=999999",
+      favorite: false,
+      lat: 39.922805,
+      lng: -105.131946
+    },
+    {
+      name: "Todd Creek",
+      url: "https://foreupsoftware.com/index.php/booking/22161/10005#teetimes",
+      favorite: false,
+      lat: 39.972829,
+      lng: -104.890302
+    },
+    {
+      name: "Green Valley Ranch",
+      url: "https://greenvalleyranch.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23.999722222222225",
+      favorite: false,
+      lat: 39.786095,
+      lng: -104.75383
+    },
+    {
+      name: "Bear Dance",
+      url: "https://beardancepub.ezlinksgolf.com/index.html#/search",
+      favorite: false,
+      lat: 39.266691,
+      lng: -104.91048
+    },
+    {
+      name: "Red Hawk Ridge",
+      url: "https://redhawkridge.cps.golf/onlineresweb/auth/verify-email?returnUrl=%2Fsearch-teetime%3FTeeOffTimeMin%3D0%26TeeOffTimeMax%3D23.999722222222225",
+      favorite: false,
+      lat: 39.386677,
+      lng: -104.885795
+    },
+    {
+      name: "Plumb Creek",
+      url: "https://www.golfplumcreek.com/tee-times/",
+      favorite: false,
+      lat: 39.351888,
+      lng: -104.85702
+    },
+    {
+      name: "Ute Creek",
+      url: "https://www.golflongmont.com/utecreek-tee-times",
+      favorite: false,
+      lat: 40.195663,
+      lng: -105.067386
+    },
+    {
+      name: "Flat Irons",
+      url: "https://bouldercolorado.gov/flatirons-golf-course/book-your-tee-time",
+      favorite: false,
+      lat: 40.011654,
+      lng: -105.22078
+    },
+    {
+      name: "Coal Creek",
+      url: "https://app.membersports.com/tee-times/3663/4714/0/0/0",
+      favorite: false,
+      lat: 39.95838,
+      lng: -105.152346
+    },
+    {
+      name: "Eagle Trace",
+      url: "https://eagletrace.cps.golf/onlineresweb/auth/verify-email?returnUrl=%2Fsearch-teetime",
+      favorite: false,
+      lat: 39.934332,
+      lng: -105.066344
+    },
+    {
+      name: "Indian Tree",
+      url: "https://indiantree.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23.999722222222225",
+      favorite: false,
+      lat: 39.8328,
+      lng: -105.082844
+    }
+  ];
+
+  let map = null;
+  let markersLayer = null;
+  let mapVisible = false;
+
+  function normalizeCourse(c) {
+    const lat = (c.lat !== undefined && c.lat !== null && c.lat !== '') ? Number(c.lat) : null;
+    const lng = (c.lng !== undefined && c.lng !== null && c.lng !== '') ? Number(c.lng) : null;
+    return {
+      name: c.name,
+      url: c.url,
+      favorite: !!c.favorite,
+      lat: (!Number.isNaN(lat) ? lat : null),
+      lng: (!Number.isNaN(lng) ? lng : null)
+    };
+  }
+
+  // Use hard-coded list, optionally overridden by localStorage if present
+  function loadCoursesRaw() {
+    const stored = localStorage.getItem('golfCourses');
+    return stored ? JSON.parse(stored) : hardCodedCourses;
+  }
+
+  function loadCourses() {
+    return loadCoursesRaw().map(normalizeCourse);
+  }
+
+  function saveCourses(courses) {
+    // Persist in localStorage
+    localStorage.setItem('golfCourses', JSON.stringify(courses));
+    // Also update the in-memory hard-coded list so the current session stays in sync
+    hardCodedCourses = courses.slice();
+  }
+
+  function teeTimeKeyForCourse(courseUrl) {
+    return `teeTimes::${courseUrl}::${TODAY_KEY}`;
+  }
+
+  function loadTeeTimes(courseUrl) {
+    const key = teeTimeKeyForCourse(courseUrl);
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  function saveTeeTimes(courseUrl, teeTimes) {
+    const key = teeTimeKeyForCourse(courseUrl);
+    if (!teeTimes || teeTimes.length === 0) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(teeTimes));
+    }
+  }
+
+  function getSearchText() {
+    const input = document.getElementById('courseSearch');
+    return input ? input.value.trim().toLowerCase() : '';
+  }
+
+  function isFavoritesFirstEnabled() {
+    const checkbox = document.getElementById('favoritesFirst');
+    return checkbox ? checkbox.checked : false;
+  }
+
+  function buildDisplayCourses() {
+    const courses = loadCourses();
+    const search = getSearchText();
+    const favFirst = isFavoritesFirstEnabled();
+
+    let filtered = courses;
+
+    if (search) {
+      filtered = courses.filter(c => {
+        const name = (c.name || '').toLowerCase();
+        return name.includes(search);
+      });
     }
 
-    const TODAY_KEY = getTodayKey();
-
-    const defaultCourses = [
-      { name: 'Fox Hollow', url: 'https://app.membersports.com/tee-times/3703/20589/0/7/0', favorite: false },
-      { name: 'Homestead',  url: 'https://app.membersports.com/tee-times/3807/4902/0/7/0', favorite: false },
-      { name: 'Fossil Trace', url: 'https://fossiltrace.cps.golf/onlineresweb/search-teetime?TeeOffTimeMin=0&TeeOffTimeMax=23.999722222222225', favorite: false },
-      { name: 'Foothills', url: 'https://app.membersports.com/tee-times/3697/4758/0/3/0', favorite: false },
-      { name: 'Racoon Creek', url: 'https://raccooncreek.ezlinksgolf.com/index.html#/search', favorite: false }
-    ];
-
-    let map = null;
-    let markersLayer = null;
-    let mapVisible = false;
-
-    function normalizeCourse(c) {
-      const lat = (c.lat !== undefined && c.lat !== null && c.lat !== '') ? Number(c.lat) : null;
-      const lng = (c.lng !== undefined && c.lng !== null && c.lng !== '') ? Number(c.lng) : null;
-      return {
-        name: c.name,
-        url: c.url,
-        favorite: !!c.favorite,
-        lat: (!Number.isNaN(lat) ? lat : null),
-        lng: (!Number.isNaN(lng) ? lng : null)
-      };
+    if (favFirst) {
+      const favs = filtered.filter(c => c.favorite);
+      const nonFavs = filtered.filter(c => !c.favorite);
+      return favs.concat(nonFavs);
     }
 
-    function loadCoursesRaw() {
-      const stored = localStorage.getItem('golfCourses');
-      return stored ? JSON.parse(stored) : defaultCourses;
-    }
+    return filtered;
+  }
 
-    function loadCourses() {
-      return loadCoursesRaw().map(normalizeCourse);
-    }
+  function renderCourses() {
+    const allCourses = loadCourses();
+    const displayCourses = buildDisplayCourses();
+    const grid = document.getElementById('coursesGrid');
 
-    function saveCourses(courses) {
-      localStorage.setItem('golfCourses', JSON.stringify(courses));
-    }
-
-    function teeTimeKeyForCourse(courseUrl) {
-      return `teeTimes::${courseUrl}::${TODAY_KEY}`;
-    }
-
-    function loadTeeTimes(courseUrl) {
-      const key = teeTimeKeyForCourse(courseUrl);
-      const stored = localStorage.getItem(key);
-      return stored ? JSON.parse(stored) : [];
-    }
-
-    function saveTeeTimes(courseUrl, teeTimes) {
-      const key = teeTimeKeyForCourse(courseUrl);
-      if (!teeTimes || teeTimes.length === 0) {
-        localStorage.removeItem(key);
-      } else {
-        localStorage.setItem(key, JSON.stringify(teeTimes));
-      }
-    }
-
-    function getSearchText() {
-      const input = document.getElementById('courseSearch');
-      return input ? input.value.trim().toLowerCase() : '';
-    }
-
-    function isFavoritesFirstEnabled() {
-      const checkbox = document.getElementById('favoritesFirst');
-      return checkbox ? checkbox.checked : false;
-    }
-
-    function buildDisplayCourses() {
-      const courses = loadCourses();
-      const search = getSearchText();
-      const favFirst = isFavoritesFirstEnabled();
-
-      let filtered = courses;
-
-      if (search) {
-        filtered = courses.filter(c => {
-          const name = (c.name || '').toLowerCase();
-          return name.includes(search);
-        });
-      }
-
-      if (favFirst) {
-        const favs = filtered.filter(c => c.favorite);
-        const nonFavs = filtered.filter(c => !c.favorite);
-        return favs.concat(nonFavs);
-      }
-
-      return filtered;
-    }
-
-    function renderCourses() {
-      const allCourses = loadCourses();
-      const displayCourses = buildDisplayCourses();
-      const grid = document.getElementById('coursesGrid');
-
-      if (displayCourses.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column: 1 / -1;">
-            <div class="empty-state">
-              <div class="empty-state-icon">🔍</div>
-              <div>No courses match your current search/filter.</div>
-            </div>
+    if (displayCourses.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1;">
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <div>No courses match your current search/filter.</div>
           </div>
-        `;
-        if (mapVisible && map) {
-          updateMapMarkers([]);
-        }
-        return;
-      }
-
-      grid.innerHTML = displayCourses.map((course) => {
-        const allCoursesList = loadCourses();
-        const originalIndex = allCoursesList.findIndex(c => c.url === course.url);
-        const teeTimes = loadTeeTimes(course.url);
-
-        const teeTimesListHtml = teeTimes.length === 0
-          ? '<div style="font-size:12px; color:#627c71;">No tee times added yet for today.</div>'
-          : `<ul style="list-style:none; padding-left:0; margin:8px 0 0 0; font-size:13px;">${
-              teeTimes.map((t, i) => `
-                <li style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:4px;">
-                  <span>${t.time} – ${t.price} – ${t.players} players</span>
-                  <button
-                    style="border:none; background:transparent; color:#c0152f; cursor:pointer; font-size:13px;"
-                    onclick="deleteTeeTime('${encodeURIComponent(course.url)}', ${i}); return false;"
-                    title="Remove this tee time"
-                  >✕</button>
-                </li>
-              `).join('')
-            }</ul>`;
-
-        const star = course.favorite ? '⭐' : '☆';
-        const starTitle = course.favorite ? 'Unfavorite' : 'Mark as favorite';
-
-        return `
-          <div class="course-card" draggable="true" data-index="${originalIndex}">
-            <div class="course-header">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <div>
-                  <h3 class="course-name">${course.name}</h3>
-                </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <button
-                    style="border:none; background:transparent; cursor:pointer; font-size:18px;"
-                    onclick="toggleFavorite(${originalIndex}); return false;"
-                    title="${starTitle}"
-                  >${star}</button>
-                  <div class="drag-handle" style="cursor:grab; font-size:18px; color:#627c71;" title="Drag to reorder">
-                    ⋮⋮
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-bottom:12px;">
-              <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:#627c71; margin-bottom:4px;">
-                Available tee times (today)
-              </div>
-              <div
-                style="
-                  display:grid;
-                  grid-template-columns: repeat(4, minmax(0, 1fr));
-                  gap:4px;
-                  align-items:center;
-                "
-              >
-                <input
-                  type="time"
-                  id="tt-time-${originalIndex}"
-                  style="padding:4px 6px; font-size:12px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
-                >
-                <input
-                  type="text"
-                  id="tt-price-${originalIndex}"
-                  placeholder="$"
-                  style="padding:4px 6px; font-size:13px; min-width:70px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
-                >
-                <input
-                  type="number"
-                  id="tt-players-${originalIndex}"
-                  min="1"
-                  max="4"
-                  placeholder="#"
-                  style="padding:4px 6px; font-size:12px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
-                >
-                <button
-                  style="padding:4px 8px; font-size:12px; border:none; border-radius:4px; background:#218085; color:#fff; cursor:pointer;"
-                  onclick="addTeeTime(${originalIndex}); return false;"
-                >Add</button>
-              </div>
-              ${teeTimesListHtml}
-            </div>
-
-
-            <div class="course-actions">
-              <button class="btn btn-primary" onclick="openBooking('${encodeURIComponent(course.url)}')">
-                🔗 Open Booking
-              </button>
-              <button class="btn btn-secondary" onclick="deleteCourse(${originalIndex})" title="Delete course">
-                ✕</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      attachDragAndDropHandlers();
-
+        </div>
+      `;
       if (mapVisible && map) {
-        const all = loadCourses();
-        updateMapMarkers(all);
+        updateMapMarkers([]);
       }
-    }
-
-    function attachDragAndDropHandlers() {
-      const grid = document.getElementById('coursesGrid');
-      const cards = Array.from(grid.querySelectorAll('.course-card'));
-      let dragStartIndex = null;
-
-      cards.forEach(card => {
-        card.addEventListener('dragstart', () => {
-          dragStartIndex = Number(card.getAttribute('data-index'));
-          card.classList.add('dragging');
-        });
-
-        card.addEventListener('dragend', () => {
-          card.classList.remove('dragging');
-        });
-
-        card.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          card.classList.add('drag-over');
-        });
-
-        card.addEventListener('dragleave', () => {
-          card.classList.remove('drag-over');
-        });
-
-        card.addEventListener('drop', () => {
-          card.classList.remove('drag-over');
-          const dragEndIndex = Number(card.getAttribute('data-index'));
-          if (dragStartIndex === null || dragEndIndex === dragStartIndex) return;
-          reorderCourses(dragStartIndex, dragEndIndex);
-        });
-      });
-    }
-
-    function reorderCourses(fromIndex, toIndex) {
-      const courses = loadCourses();
-      if (fromIndex < 0 || fromIndex >= courses.length) return;
-      if (toIndex < 0 || toIndex >= courses.length) return;
-
-      const item = courses.splice(fromIndex, 1)[0];
-      courses.splice(toIndex, 0, item);
-
-      saveCourses(courses);
-      renderCourses();
-    }
-
-    function toggleFavorite(index) {
-      const courses = loadCourses();
-      if (!courses[index]) return;
-      courses[index].favorite = !courses[index].favorite;
-      saveCourses(courses);
-      renderCourses();
-    }
-
-    function clearAllFavorites() {
-      const courses = loadCourses();
-      let changed = false;
-      courses.forEach(c => {
-        if (c.favorite) {
-          c.favorite = false;
-          changed = true;
-        }
-      });
-      if (changed) {
-        saveCourses(courses);
-      }
-      const favCheckbox = document.getElementById('favoritesFirst');
-      if (favCheckbox) {
-        favCheckbox.checked = false;
-      }
-      renderCourses();
-      showStatus('All favorites cleared.', 'success');
-    }
-
-    function addTeeTime(courseIndex) {
-      const courses = loadCourses();
-      const course = courses[courseIndex];
-      if (!course) return;
-
-      const timeInput = document.getElementById(`tt-time-${courseIndex}`);
-      const priceInput = document.getElementById(`tt-price-${courseIndex}`);
-      const playersInput = document.getElementById(`tt-players-${courseIndex}`);
-
-      const time = (timeInput.value || '').trim();
-      const price = (priceInput.value || '').trim();
-      const players = (playersInput.value || '').trim();
-
-      if (!time || !price || !players) {
-        showStatus('Please fill time, price, and players for the tee time.', 'error');
-        return;
-      }
-
-      const parsedPlayers = Number(players);
-      if (Number.isNaN(parsedPlayers) || parsedPlayers <= 0) {
-        showStatus('Players must be a positive number.', 'error');
-        return;
-      }
-
-      const teeTimes = loadTeeTimes(course.url);
-      teeTimes.push({ time, price, players: parsedPlayers });
-
-      saveTeeTimes(course.url, teeTimes);
-
-      timeInput.value = '';
-      priceInput.value = '';
-      playersInput.value = '';
-
-      renderCourses();
-    }
-
-    function deleteTeeTime(encodedCourseUrl, teeTimeIndex) {
-      const url = decodeURIComponent(encodedCourseUrl);
-      const teeTimes = loadTeeTimes(url);
-      if (teeTimeIndex < 0 || teeTimeIndex >= teeTimes.length) return;
-
-      teeTimes.splice(teeTimeIndex, 1);
-      saveTeeTimes(url, teeTimes);
-      renderCourses();
-    }
-
-    function openBooking(encodedUrl) {
-      const url = decodeURIComponent(encodedUrl);
-      window.open(url, '_blank');
-    }
-
-    function deleteCourse(index) {
-      if (confirm('Are you sure you want to delete this course?')) {
-        let courses = loadCourses();
-        const removed = courses.splice(index, 1)[0];
-        saveCourses(courses);
-
-        if (removed && removed.url) {
-          const key = teeTimeKeyForCourse(removed.url);
-          localStorage.removeItem(key);
-        }
-
-        renderCourses();
-        showStatus('Course deleted', 'success');
-      }
-    }
-
-   function addCourse() {
-  const name = document.getElementById('courseName').value.trim();
-  const url = document.getElementById('courseUrl').value.trim();
-  const latRaw = document.getElementById('courseLat') ? document.getElementById('courseLat').value.trim() : '';
-  const lngRaw = document.getElementById('courseLng') ? document.getElementById('courseLng').value.trim() : '';
-
-  if (!name || !url) {
-    showStatus('Please fill in both course name and URL.', 'error');
-    return;
-  }
-
-  const courses = loadCourses();
-
-  // Allow same URL on different tiles; only block exact same name+URL
-  if (courses.some(c => c.name === name && c.url === url)) {
-    showStatus('This course already exists.', 'error');
-    return;
-  }
-
-  let lat = null;
-  let lng = null;
-
-  if (latRaw && lngRaw) {
-    const latNum = Number(latRaw);
-    const lngNum = Number(lngRaw);
-    if (Number.isNaN(latNum) || Number.isNaN(lngNum)) {
-      showStatus('Latitude and longitude must be valid numbers (or left blank).', 'error');
       return;
     }
-    lat = latNum;
-    lng = lngNum;
-  } else if (latRaw || lngRaw) {
-    showStatus('Please provide both latitude and longitude, or leave both blank.', 'error');
-    return;
+
+    grid.innerHTML = displayCourses.map((course) => {
+      const allCoursesList = loadCourses();
+      const originalIndex = allCoursesList.findIndex(c => c.url === course.url);
+      const teeTimes = loadTeeTimes(course.url);
+
+      const teeTimesListHtml = teeTimes.length === 0
+        ? '<div style="font-size:12px; color:#627c71;">No tee times added yet for today.</div>'
+        : `<ul style="list-style:none; padding-left:0; margin:8px 0 0 0; font-size:13px;">${
+            teeTimes.map((t, i) => `
+              <li style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:4px;">
+                <span>${t.time} – ${t.price} – ${t.players} players</span>
+                <button
+                  style="border:none; background:transparent; color:#c0152f; cursor:pointer; font-size:13px;"
+                  onclick="deleteTeeTime('${encodeURIComponent(course.url)}', ${i}); return false;"
+                  title="Remove this tee time"
+                >✕</button>
+              </li>
+            `).join('')
+          }</ul>`;
+
+      const star = course.favorite ? '⭐' : '☆';
+      const starTitle = course.favorite ? 'Unfavorite' : 'Mark as favorite';
+
+      return `
+        <div class="course-card" draggable="true" data-index="${originalIndex}">
+          <div class="course-header">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <div>
+                <h3 class="course-name">${course.name}</h3>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button
+                  style="border:none; background:transparent; cursor:pointer; font-size:18px;"
+                  onclick="toggleFavorite(${originalIndex}); return false;"
+                  title="${starTitle}"
+                >${star}</button>
+                <div class="drag-handle" style="cursor:grab; font-size:18px; color:#627c71;" title="Drag to reorder">
+                  ⋮⋮
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:#627c71; margin-bottom:4px;">
+              Available tee times (today)
+            </div>
+            <div
+              style="
+                display:grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap:4px;
+                align-items:center;
+              "
+            >
+              <input
+                type="time"
+                id="tt-time-${originalIndex}"
+                style="padding:4px 6px; font-size:12px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
+              >
+              <input
+                type="text"
+                id="tt-price-${originalIndex}"
+                placeholder="$"
+                style="padding:4px 6px; font-size:13px; min-width:70px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
+              >
+              <input
+                type="number"
+                id="tt-players-${originalIndex}"
+                min="1"
+                max="4"
+                placeholder="#"
+                style="padding:4px 6px; font-size:12px; border:1px solid rgba(94,82,64,0.2); border-radius:4px;"
+              >
+              <button
+                style="padding:4px 8px; font-size:12px; border:none; border-radius:4px; background:#218085; color:#fff; cursor:pointer;"
+                onclick="addTeeTime(${originalIndex}); return false;"
+              >Add</button>
+            </div>
+            ${teeTimesListHtml}
+          </div>
+
+          <div class="course-actions">
+            <button class="btn btn-primary" onclick="openBooking('${encodeURIComponent(course.url)}')">
+              🔗 Open Booking
+            </button>
+            <button class="btn btn-secondary" onclick="deleteCourse(${originalIndex})" title="Delete course">
+              ✕</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    attachDragAndDropHandlers();
+
+    if (mapVisible && map) {
+      const all = loadCourses();
+      updateMapMarkers(all);
+    }
   }
 
-  courses.push({ name, url, favorite: false, lat, lng });
-  saveCourses(courses);
+  function attachDragAndDropHandlers() {
+    const grid = document.getElementById('coursesGrid');
+    const cards = Array.from(grid.querySelectorAll('.course-card'));
+    let dragStartIndex = null;
 
-  document.getElementById('courseName').value = '';
-  document.getElementById('courseUrl').value = '';
-  if (document.getElementById('courseLat')) document.getElementById('courseLat').value = '';
-  if (document.getElementById('courseLng')) document.getElementById('courseLng').value = '';
-
-  renderCourses();
-  showStatus(`${name} added successfully!`, 'success');
-}
-
-
-    function showStatus(message, type) {
-      const statusDiv = document.getElementById('statusMessage');
-      statusDiv.innerHTML = `<div class="status-message ${type}">${message}</div>`;
-      setTimeout(() => {
-        statusDiv.innerHTML = '';
-      }, 3000);
-    }
-
-    // Leaflet: center on Denver
-    function initMap() {
-      map = L.map('map').setView([39.7392, -104.9903], 9);
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-
-      markersLayer = L.layerGroup().addTo(map);
-    }
-
-    function updateMapMarkers(courses) {
-      if (!map || !markersLayer) return;
-
-      markersLayer.clearLayers();
-      const bounds = [];
-
-      courses.forEach(course => {
-        if (course.lat != null && course.lng != null) {
-          const lat = Number(course.lat);
-          const lng = Number(course.lng);
-          if (Number.isNaN(lat) || Number.isNaN(lng)) return;
-
-          const marker = L.marker([lat, lng]).addTo(markersLayer);
-
-          const popupHtml = `
-            <div>
-              <strong>${course.name}</strong><br>
-              <button type="button" class="map-favorite-btn" data-url="${course.url}">
-                ${course.favorite ? 'Unfavorite' : 'Favorite'}
-              </button>
-            </div>
-          `;
-
-          marker.bindPopup(popupHtml);
-          bounds.push([lat, lng]);
-        }
+    cards.forEach(card => {
+      card.addEventListener('dragstart', () => {
+        dragStartIndex = Number(card.getAttribute('data-index'));
+        card.classList.add('dragging');
       });
 
-      if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [40, 40] });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+      });
+
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        card.classList.add('drag-over');
+      });
+
+      card.addEventListener('dragleave', () => {
+        card.classList.remove('drag-over');
+      });
+
+      card.addEventListener('drop', () => {
+        card.classList.remove('drag-over');
+        const dragEndIndex = Number(card.getAttribute('data-index'));
+        if (dragStartIndex === null || dragEndIndex === dragStartIndex) return;
+        reorderCourses(dragStartIndex, dragEndIndex);
+      });
+    });
+  }
+
+  function reorderCourses(fromIndex, toIndex) {
+    const courses = loadCourses();
+    if (fromIndex < 0 || fromIndex >= courses.length) return;
+    if (toIndex < 0 || toIndex >= courses.length) return;
+
+    const item = courses.splice(fromIndex, 1)[0];
+    courses.splice(toIndex, 0, item);
+
+    saveCourses(courses);
+    renderCourses();
+  }
+
+  function toggleFavorite(index) {
+    const courses = loadCourses();
+    if (!courses[index]) return;
+    courses[index].favorite = !courses[index].favorite;
+    saveCourses(courses);
+    renderCourses();
+  }
+
+  function clearAllFavorites() {
+    const courses = loadCourses();
+    let changed = false;
+    courses.forEach(c => {
+      if (c.favorite) {
+        c.favorite = false;
+        changed = true;
       }
+    });
+    if (changed) {
+      saveCourses(courses);
+    }
+    const favCheckbox = document.getElementById('favoritesFirst');
+    if (favCheckbox) {
+      favCheckbox.checked = false;
+    }
+    renderCourses();
+    showStatus('All favorites cleared.', 'success');
+  }
+
+  function addTeeTime(courseIndex) {
+    const courses = loadCourses();
+    const course = courses[courseIndex];
+    if (!course) return;
+
+    const timeInput = document.getElementById(`tt-time-${courseIndex}`);
+    const priceInput = document.getElementById(`tt-price-${courseIndex}`);
+    const playersInput = document.getElementById(`tt-players-${courseIndex}`);
+
+    const time = (timeInput.value || '').trim();
+    const price = (priceInput.value || '').trim();
+    const players = (playersInput.value || '').trim();
+
+    if (!time || !price || !players) {
+      showStatus('Please fill time, price, and players for the tee time.', 'error');
+      return;
     }
 
-    document.addEventListener('click', (event) => {
-      const btn = event.target.closest('.map-favorite-btn');
-      if (!btn) return;
+    const parsedPlayers = Number(players);
+    if (Number.isNaN(parsedPlayers) || parsedPlayers <= 0) {
+      showStatus('Players must be a positive number.', 'error');
+      return;
+    }
 
-      const url = btn.getAttribute('data-url');
-      if (!url) return;
+    const teeTimes = loadTeeTimes(course.url);
+    teeTimes.push({ time, price, players: parsedPlayers });
 
-      const courses = loadCourses();
-      const index = courses.findIndex(c => c.url === url);
-      if (index === -1) return;
+    saveTeeTimes(course.url, teeTimes);
 
-      courses[index].favorite = !courses[index].favorite;
+    timeInput.value = '';
+    priceInput.value = '';
+    playersInput.value = '';
+
+    renderCourses();
+  }
+
+  function deleteTeeTime(encodedCourseUrl, teeTimeIndex) {
+    const url = decodeURIComponent(encodedCourseUrl);
+    const teeTimes = loadTeeTimes(url);
+    if (teeTimeIndex < 0 || teeTimeIndex >= teeTimes.length) return;
+
+    teeTimes.splice(teeTimeIndex, 1);
+    saveTeeTimes(url, teeTimes);
+    renderCourses();
+  }
+
+  function openBooking(encodedUrl) {
+    const url = decodeURIComponent(encodedUrl);
+    window.open(url, '_blank');
+  }
+
+  function deleteCourse(index) {
+    if (confirm('Are you sure you want to delete this course?')) {
+      let courses = loadCourses();
+      const removed = courses.splice(index, 1)[0];
       saveCourses(courses);
+
+      if (removed && removed.url) {
+        const key = teeTimeKeyForCourse(removed.url);
+        localStorage.removeItem(key);
+      }
+
       renderCourses();
+      showStatus('Course deleted', 'success');
+    }
+  }
+
+  function addCourse() {
+    const name = document.getElementById('courseName').value.trim();
+    const url = document.getElementById('courseUrl').value.trim();
+    const latRaw = document.getElementById('courseLat') ? document.getElementById('courseLat').value.trim() : '';
+    const lngRaw = document.getElementById('courseLng') ? document.getElementById('courseLng').value.trim() : '';
+
+    if (!name || !url) {
+      showStatus('Please fill in both course name and URL.', 'error');
+      return;
+    }
+
+    const courses = loadCourses();
+
+    // Allow same URL on different tiles; only block exact same name+URL
+    if (courses.some(c => c.name === name && c.url === url)) {
+      showStatus('This course already exists.', 'error');
+      return;
+    }
+
+    let lat = null;
+    let lng = null;
+
+    if (latRaw && lngRaw) {
+      const latNum = Number(latRaw);
+      const lngNum = Number(lngRaw);
+      if (Number.isNaN(latNum) || Number.isNaN(lngNum)) {
+        showStatus('Latitude and longitude must be valid numbers (or left blank).', 'error');
+        return;
+      }
+      lat = latNum;
+      lng = lngNum;
+    } else if (latRaw || lngRaw) {
+      showStatus('Please provide both latitude and longitude, or leave both blank.', 'error');
+      return;
+    }
+
+    courses.push({ name, url, favorite: false, lat, lng });
+    saveCourses(courses);
+
+    document.getElementById('courseName').value = '';
+    document.getElementById('courseUrl').value = '';
+    if (document.getElementById('courseLat')) document.getElementById('courseLat').value = '';
+    if (document.getElementById('courseLng')) document.getElementById('courseLng').value = '';
+
+    renderCourses();
+    showStatus(`${name} added successfully!`, 'success');
+  }
+
+  function showStatus(message, type) {
+    const statusDiv = document.getElementById('statusMessage');
+    statusDiv.innerHTML = `<div class="status-message ${type}">${message}</div>`;
+    setTimeout(() => {
+      statusDiv.innerHTML = '';
+    }, 3000);
+  }
+
+  // Leaflet: center on Denver
+  function initMap() {
+    map = L.map('map').setView([39.7392, -104.9903], 9);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    markersLayer = L.layerGroup().addTo(map);
+  }
+
+  function updateMapMarkers(courses) {
+    if (!map || !markersLayer) return;
+
+    markersLayer.clearLayers();
+    const bounds = [];
+
+    courses.forEach(course => {
+      if (course.lat != null && course.lng != null) {
+        const lat = Number(course.lat);
+        const lng = Number(course.lng);
+        if (Number.isNaN(lat) || Number.isNaN(lng)) return;
+
+        const marker = L.marker([lat, lng]).addTo(markersLayer);
+
+        const popupHtml = `
+          <div>
+            <strong>${course.name}</strong><br>
+            <button type="button" class="map-favorite-btn" data-url="${course.url}">
+              ${course.favorite ? 'Unfavorite' : 'Favorite'}
+            </button>
+          </div>
+        `;
+
+        marker.bindPopup(popupHtml);
+        bounds.push([lat, lng]);
+      }
     });
 
-    function toggleMap() {
-      const mapPanel = document.getElementById('mapPanel');
-      const toggleButton = document.getElementById('mapToggleButton');
-      if (!mapPanel || !toggleButton) return;
+    if (bounds.length > 0) {
+      map.fitBounds(bounds, { padding: [40, 40] });
+    }
+  }
 
-      mapVisible = !mapVisible;
+  document.addEventListener('click', (event) => {
+    const btn = event.target.closest('.map-favorite-btn');
+    if (!btn) return;
 
-      if (mapVisible) {
-        mapPanel.style.display = 'block';
-        toggleButton.textContent = 'Hide Map';
+    const url = btn.getAttribute('data-url');
+    if (!url) return;
 
-        if (!map) {
-          initMap();
+    const courses = loadCourses();
+    const index = courses.findIndex(c => c.url === url);
+    if (index === -1) return;
+
+    courses[index].favorite = !courses[index].favorite;
+    saveCourses(courses);
+    renderCourses();
+  });
+
+  function toggleMap() {
+    const mapPanel = document.getElementById('mapPanel');
+    const toggleButton = document.getElementById('mapToggleButton');
+    if (!mapPanel || !toggleButton) return;
+
+    mapVisible = !mapVisible;
+
+    if (mapVisible) {
+      mapPanel.style.display = 'block';
+      toggleButton.textContent = 'Hide Map';
+
+      if (!map) {
+        initMap();
+        const courses = loadCourses();
+        updateMapMarkers(courses);
+      } else {
+        setTimeout(() => {
+          map.invalidateSize();
           const courses = loadCourses();
           updateMapMarkers(courses);
-        } else {
-          setTimeout(() => {
-            map.invalidateSize();
-            const courses = loadCourses();
-            updateMapMarkers(courses);
-          }, 0);
-        }
-      } else {
-        mapPanel.style.display = 'none';
-        toggleButton.textContent = 'Show Map';
+        }, 0);
       }
+    } else {
+      mapPanel.style.display = 'none';
+      toggleButton.textContent = 'Show Map';
     }
+  }
 
-    document.getElementById('addBtn').addEventListener('click', addCourse);
-    document.getElementById('courseUrl').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') addCourse();
+  document.getElementById('addBtn').addEventListener('click', addCourse);
+  document.getElementById('courseUrl').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addCourse();
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', exportCourses);
+  document.getElementById('importBtn').addEventListener('click', importCourses);
+
+  const searchInput = document.getElementById('courseSearch');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      renderCourses();
     });
+  }
 
-    document.getElementById('exportBtn').addEventListener('click', exportCourses);
-    document.getElementById('importBtn').addEventListener('click', importCourses);
+  const favFirstCheckbox = document.getElementById('favoritesFirst');
+  if (favFirstCheckbox) {
+    favFirstCheckbox.addEventListener('change', () => {
+      renderCourses();
+    });
+  }
 
-    const searchInput = document.getElementById('courseSearch');
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        renderCourses();
-      });
-    }
+  const clearFavBtn = document.getElementById('clearFavoritesBtn');
+  if (clearFavBtn) {
+    clearFavBtn.addEventListener('click', () => {
+      clearAllFavorites();
+    });
+  }
 
-    const favFirstCheckbox = document.getElementById('favoritesFirst');
-    if (favFirstCheckbox) {
-      favFirstCheckbox.addEventListener('change', () => {
-        renderCourses();
-      });
-    }
+  const mapToggleButton = document.getElementById('mapToggleButton');
+  if (mapToggleButton) {
+    mapToggleButton.addEventListener('click', toggleMap);
+  }
 
-    const clearFavBtn = document.getElementById('clearFavoritesBtn');
-    if (clearFavBtn) {
-      clearFavBtn.addEventListener('click', () => {
-        clearAllFavorites();
-      });
-    }
-
-    const mapToggleButton = document.getElementById('mapToggleButton');
-    if (mapToggleButton) {
-      mapToggleButton.addEventListener('click', toggleMap);
-    }
-
-    function exportCourses() {
-      const courses = loadCourses();
-      try {
-        const payload = {
-          version: 2,
-          exportedAt: new Date().toISOString(),
-          courses
-        };
-        const text = JSON.stringify(payload, null, 2);
-        const textarea = document.getElementById('courseTransfer');
-        textarea.value = text;
-        textarea.select();
-        showStatus('Courses exported. Copy the text and paste it into another device to import.', 'success');
-      } catch (e) {
-        showStatus('Failed to export courses.', 'error');
-      }
-    }
-
-    function importCourses() {
+  function exportCourses() {
+    const courses = loadCourses();
+    try {
+      const payload = {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        courses
+      };
+      const text = JSON.stringify(payload, null, 2);
       const textarea = document.getElementById('courseTransfer');
-      const text = textarea.value.trim();
-      if (!text) {
-        showStatus('Please paste exported course data into the box before importing.', 'error');
+      textarea.value = text;
+      textarea.select();
+      showStatus('Courses exported. Copy the text and paste it into another device to import.', 'success');
+    } catch (e) {
+      showStatus('Failed to export courses.', 'error');
+    }
+  }
+
+  function importCourses() {
+    const textarea = document.getElementById('courseTransfer');
+    const text = textarea.value.trim();
+    if (!text) {
+      showStatus('Please paste exported course data into the box before importing.', 'error');
+      return;
+    }
+
+    try {
+      const payload = JSON.parse(text);
+      if (!payload || !Array.isArray(payload.courses)) {
+        showStatus('Invalid import format. Make sure you pasted the full exported text.', 'error');
         return;
       }
 
-      try {
-        const payload = JSON.parse(text);
-        if (!payload || !Array.isArray(payload.courses)) {
-          showStatus('Invalid import format. Make sure you pasted the full exported text.', 'error');
-          return;
-        }
-
-        const importedCourses = payload.courses.map(normalizeCourse);
-        const valid = importedCourses.every(c => c && c.name && c.url);
-        if (!valid) {
-          showStatus('Imported data is missing required fields (name/url).', 'error');
-          return;
-        }
-
-        saveCourses(importedCourses);
-        renderCourses();
-        showStatus(`Imported ${importedCourses.length} courses successfully.`, 'success');
-      } catch (e) {
-        showStatus('Error parsing imported data. Make sure you pasted valid JSON.', 'error');
+      const importedCourses = payload.courses.map(normalizeCourse);
+      const valid = importedCourses.every(c => c && c.name && c.url);
+      if (!valid) {
+        showStatus('Imported data is missing required fields (name/url).', 'error');
+        return;
       }
-    }
 
-    // Initial render only (map starts hidden; initMap() runs when you first click Show Map)
-    renderCourses();
-  </script>
+      saveCourses(importedCourses);
+      renderCourses();
+      showStatus(`Imported ${importedCourses.length} courses successfully.`, 'success');
+    } catch (e) {
+      showStatus('Error parsing imported data. Make sure you pasted valid JSON.', 'error');
+    }
+  }
+
+  // Initial render only
+  renderCourses();
+</script>
 </body>
 </html>
